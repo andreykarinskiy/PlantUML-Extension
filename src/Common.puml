@@ -1,5 +1,13 @@
 @startuml
+''----------------------------------------------------------------------------------------------------------------------
+'' Get PlantUml Extension library version.
+'' example: !$ver = $PlantUmlExtensionVer()
+!function $PlantUmlExtensionVer()
+    !$ver = %load_json("../version.json")
+    !return $Format("%1.%2.%3", $ver.major, $ver.minor, $ver.patch)
+!endfunction
 
+''----------------------------------------------------------------------------------------------------------------------
 '' Converts the value of objects to strings based on the
 '' formats specified and inserts them into another string.
 '' example: !$text = $Format("This is %1 with arguments %2 and %3.", "expression", "x", "y")
@@ -40,5 +48,4 @@
 !endfunction
 
 ''----------------------------------------------------------------------------------------------------------------------
-
 @enduml
