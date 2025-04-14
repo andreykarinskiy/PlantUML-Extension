@@ -6,6 +6,7 @@
 ![GitHub License](https://img.shields.io/github/license/andreykarinskiy/PlantUML-Extension)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/andreykarinskiy/PlantUML-Extension/total)
 ![GitHub Repo stars](https://img.shields.io/github/stars/andreykarinskiy/PlantUML-Extension)  
+[![Release](https://github.com/andreykarinskiy/PlantUML-Extension/actions/workflows/build.yml/badge.svg)](https://github.com/andreykarinskiy/PlantUML-Extension/actions/workflows/build.yml)
 ![GitHub last commit](https://img.shields.io/github/last-commit/andreykarinskiy/PlantUML-Extension)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/andreykarinskiy/PlantUML-Extension)
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/andreykarinskiy/PlantUML-Extension)

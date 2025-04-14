@@ -1,0 +1,95 @@
+@startuml
+
+!global $COLOR = {
+    "Undefined": "transparent",
+    "Entity": "LightYellow",
+    "Abstract": "Azure",
+    "Alert": "Red",
+    "Component": "Blue"
+}
+
+
+skinparam minClassWidth 80
+skinparam nodesep 10
+skinparam ranksep 10
+
+'' Converts the value of objects to strings based on the
+'' formats specified and inserts them into another string.
+'' example: !$text = $FormatString("This is %1 with arguments %2 and %3.", "expression", "x", "y")
+!function $Format($text, $p1, $p2="", $p3="", $p4="", $p5="", $p6="", $p7="", $p8="")
+    !$result = ""
+    !$pos1 = %strpos($text, "%1")
+    !$pos2 = %strpos($text, "%2")
+    !$pos3 = %strpos($text, "%3")
+    !$pos4 = %strpos($text, "%4")
+    !$pos5 = %strpos($text, "%5")
+    !$pos6 = %strpos($text, "%6")
+    !$pos7 = %strpos($text, "%7")
+    !$pos8 = %strpos($text, "%8")
+
+    !foreach $fragment in %splitstr($text, "%")
+        !if (%substr($fragment, 0, 1) == "1")
+            !$result = $result + $p1 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "2")
+            !$result = $result + $p2 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "3")
+            !$result = $result + $p3 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "4")
+            !$result = $result + $p4 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "5")
+            !$result = $result + $p5 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "6")
+            !$result = $result + $p6 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "7")
+            !$result = $result + $p7 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !elseif (%substr($fragment, 0, 1) == "8")
+            !$result = $result + $p8 + %substr($fragment, 1, %strlen($fragment) - 1)
+        !else
+            !$result = $result + $fragment
+        !endif
+    !endfor
+
+    !return $result
+!endfunction
+
+
+!procedure $Table($columns, $rows, $dataAccessor, $cellRenderer)
+    !$c = 0
+    !$index = 0
+    !while $c < $columns
+        !$r = 0
+        !while $r < $rows
+            !$pair = %call_user_func($dataAccessor, $index)
+            !if $pair != 0
+                %invoke_procedure($cellRenderer, $pair.Name, $pair.Value)
+            !else
+                %invoke_procedure($cellRenderer, $Format("%1-%2", $c, $r), "transparent")
+            !endif
+            !$index = $index + 1
+            !$r = $r + 1
+        !endwhile
+        !$c = $c + 1
+    !endwhile
+!endprocedure
+
+
+!function $GetColorByIndex($index, $undefined=0)
+    !$n = 0
+    !foreach $key in %get_json_keys($COLOR)
+        !if $n == $index
+            !$pair = %str2json($Format('{"Name": "%1", "Value": "%2"}', $key, $COLOR[$key]))
+            !return $pair
+        !endif
+        !$n = $n + 1
+    !endfor
+    !return $undefined
+!endfunction
+
+
+!procedure $DrawCell($name, $color)
+    rectangle "$name" #$color
+!endprocedure
+
+$Table(4, 4, $GetColorByIndex, $DrawCell)
+
+@enduml
