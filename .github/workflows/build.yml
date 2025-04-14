@@ -19,9 +19,9 @@ jobs:
         with:
           # The directory to archive from
           root-directory: ./src
-          include: .puml
-          format: zip
-          name: PUML-Ext
+          include: "**/*.puml"
+          format: "zip"
+          name: "PUML-Ext"
     
       - name: Run a multi-line script
         run: |
