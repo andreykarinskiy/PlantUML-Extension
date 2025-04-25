@@ -3,6 +3,8 @@ name: Release
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - "v*.*.*"
 #  release:
 #    types: [created]
 
@@ -25,11 +27,12 @@ jobs:
 
         zip -r plantuml-docs.zip -@ < filelist.txt
 
-    - name: Upload to Release
-      if: success() && steps.package.outcome == 'success'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: |
-          PlantUml-Extension.zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#    - name: Upload to Release
+#      if: success() && steps.package.outcome == 'success'
+#      uses: softprops/action-gh-release@v2
+#      if: github.ref_type == 'tag'
+#      with:
+#        files: |
+#          PlantUml-Extension.zip
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
