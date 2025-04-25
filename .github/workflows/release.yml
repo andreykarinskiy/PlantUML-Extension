@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #name: Release
 #
 #on:
@@ -27,3 +28,6 @@
 #      with:
 #        name: PlantUml-Extension
 #        path: '**/*.zip'
+=======
+name: Release
+>>>>>>> 83843c3780e4e702034b6aa60766834d0528d049
