@@ -18,4 +18,8 @@ jobs:
       - name: Determine Version
         id: version_step
         uses: gittools/actions/gitversion/execute@v3.2.0
+<<<<<<< HEAD
         
+=======
+        
+>>>>>>> cae12834c3b616d8c23d1e7971a08dc53ffe006f
