@@ -51,8 +51,8 @@ jobs:
             git log --pretty=format:"- %s (%h)" "${{ steps.gitversion.outputs.previousTag }}"..HEAD --no-merges >> ReleaseNotes.md
           fi
 
-      - name: Pull latest changes before push
-        run: git pull --rebase origin ${{ github.ref_name }}
+     # - name: Pull latest changes before push
+     #   run: git pull --rebase origin ${{ github.ref_name }}
 
       - name: Commit and push version files
         env:
