@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Find and package PlantUML files
+      id: package
+      run: |
+        find . -type f \( -name '*.puml' -o -name '*.plantuml' \) > filelist.txt
+        
+        if [ ! -s filelist.txt ]; then
+          echo "No PlantUML files found. Skipping archive creation."
+          exit 0
+        fi
+
+        zip -r plantuml-docs.zip -@ < filelist.txt
+
+    - name: Upload to Release
+      if: success() && steps.package.outcome == 'success'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          PlantUml-Extension.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
