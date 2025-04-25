@@ -19,14 +19,26 @@ jobs:
       - name: Prepare and package PlantUML files
         id: package
         run: |
-          mkdir -p PlantUml-Extension
-          find src -type f \( -name '*.puml' \) > files.txt
-          if [ ! -s files.txt ]; then
+          find src -type f \( -name '*.puml' \) > filelist.txt
+          
+          if [ ! -s filelist.txt ]; then
             echo "No PlantUML files found in 'src' directory. Skipping archive creation."
             exit 0
           fi
-          tar cf - --files-from=files.txt --transform='s|^src/||' | tar xf - -C PlantUml-Extension/
-          zip -r PlantUml-Extension.zip PlantUml-Extension/
+          
+          mkdir -p temp_archive
+          
+          while IFS= read -r file; do
+            dest="${file#src/}"
+            mkdir -p "temp_archive/$(dirname "$dest")"
+            cp "$file" "temp_archive/$dest"
+          done < filelist.txt
+          
+          cd temp_archive
+          zip -r ../PlantUml-Extension.zip .
+          cd ..
+          
+          rm -rf temp_archive filelist.txt
 
       - uses: actions/upload-artifact@v4
         with:
