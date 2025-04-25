@@ -45,3 +45,22 @@ jobs:
           git add version.json
           git commit -m "ci: update version to ${{ steps.gitversion.outputs.semVer }}" || echo "No changes to commit"
           git push origin HEAD:main
+
+      - name: Prepare Archive
+        run: |
+          mkdir -p archive
+          # Копируем PUML-файлы с сохранением структуры
+          find src -name '*.puml' -exec cp --parents '{}' archive/ \;
+          cp version.json archive/
+
+      - name: Create ZIP
+        run: |
+          ZIP_NAME="PlantUML-Extension-v${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}.zip"
+          zip -r $ZIP_NAME archive/*
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}
