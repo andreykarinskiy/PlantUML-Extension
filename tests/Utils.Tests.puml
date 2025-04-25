@@ -1,19 +1,19 @@
 @startuml
-!include ../src/Common.puml
+!include ../src/Utils.puml
 ''----------------------------------------------------------------------------------------------------------------------
 '' Тесты
 ''----------------------------------------------------------------------------------------------------------------------
-!procedure PlantUmlExtensionVer_returns_semantic_version()
+!procedure Format_should_convert_values_to_string_based_on_specified_placeholders()
     '' Arrange, Act
-    !$actual = $PlantUmlExtensionVer()
+    !$actual = $Format("This is %1 with arguments %2 and %3.", "expression", "x", "y")
 
     '' Assert
-    !assert %size(%splitstr($actual, ".")) == 3
+    !assert "This is expression with arguments x and y." == $actual
 !endprocedure
 ''----------------------------------------------------------------------------------------------------------------------
 '' Запуск тестов
 ''----------------------------------------------------------------------------------------------------------------------
-PlantUmlExtensionVer_returns_semantic_version()
+Format_should_convert_values_to_string_based_on_specified_placeholders()
 ''----------------------------------------------------------------------------------------------------------------------
 caption OK
 @enduml
