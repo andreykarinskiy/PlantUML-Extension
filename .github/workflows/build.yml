@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.15
+        uses: nmcc/actions-gitversion@v1
         with:
           versionSpec: '5.x'
 
