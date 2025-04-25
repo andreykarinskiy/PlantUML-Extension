@@ -25,7 +25,12 @@ jobs:
           exit 0
         fi
 
-        zip -r plantuml-docs.zip -@ < filelist.txt
+        zip -r PlantUml-Extension.zip -@ < filelist.txt
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: PlantUml-Extension
+        path: path/**/*.zip
 
 #    - name: Upload to Release
 #      if: success() && steps.package.outcome == 'success'
