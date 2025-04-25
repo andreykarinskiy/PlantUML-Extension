@@ -33,7 +33,7 @@ jobs:
       - name: Create version.json
         run: |
           echo '{
-            "CommitDate": ${{ env.commitDate }},
+            "CommitDate": "${{ env.commitDate }}",
             "Major": ${{ env.major }},
             "Minor": ${{ env.minor }},
             "Patch": ${{ env.patch }}
