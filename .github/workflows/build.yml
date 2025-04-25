@@ -16,10 +16,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install GitVersion
-        uses: nmcc/actions-gitversion@v1
-        with:
-          versionSpec: '5.x'
-
+        uses: GitTools/actions@v3.2.0
+        
       - name: Generate Version Info
         run: gitversion /output json /outputfile version.json
 #
