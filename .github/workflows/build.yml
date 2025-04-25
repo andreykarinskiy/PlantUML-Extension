@@ -15,3 +15,8 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
           
+      - name: Determine Version
+        id: version_step
+        uses: gittools/actions/gitversion/execute@v3.2.0
+        with:
+          useConfigFile: true
