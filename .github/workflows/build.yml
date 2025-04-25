@@ -33,10 +33,10 @@ jobs:
       - name: Create version.json
         run: |
           echo '{
-            "CommitDate": ${{ steps.gitversion.outputs.commitDate }},
-            "Major": ${{ steps.gitversion.outputs.major }},
-            "Minor": ${{ steps.gitversion.outputs.minor }},
-            "Patch": ${{ steps.gitversion.outputs.patch }}
+            "CommitDate": ${{ env.commitDate }},
+            "Major": ${{ env.major }},
+            "Minor": ${{ env.minor }},
+            "Patch": ${{ env.patch }}
           }' > version.json
 
       - name: Commit version.json
