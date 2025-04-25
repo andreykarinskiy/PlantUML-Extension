@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - '**/*.cs'
       - '!ReleaseNotes.md'
 jobs:
   build:
