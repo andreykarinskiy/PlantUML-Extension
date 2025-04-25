@@ -15,43 +15,24 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.2.0
-        with:
-          versionSpec: '6.2.x'
-
       - name: Determine Version
-        id: version_step # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v3.2.0
-        
-#      - name: Generate Version Info
-#        run: gitversion /output json /outputfile version.json
-#
-#      - name: Commit version.json
-#        run: |
-#          git config --local user.email "actions@github.com"
-#          git config --local user.name "GitHub Actions"
-#          git add version.json
-#          git commit -m "ci: update version [skip ci]"
-#          git push origin HEAD:main
-#
-#      - name: Extract Version
-#        id: set-version
-#        run: |
-#          MAJOR=$(jq -r '.Major' version.json)
-#          MINOR=$(jq -r '.Minor' version.json)
-#          echo "VERSION=v$MAJOR.$MINOR" >> $GITHUB_ENV
-#          echo "ZIP_NAME=PlantUML-Extension-$VERSION.zip" >> $GITHUB_ENV
-#
-#      - name: Create Archive
-#        run: |
-#          mkdir -p archive
-#          find src -name '*.puml' -exec cp --parents '{}' archive/ \;
-#          cp version.json archive/
-#          zip -r ${{ env.ZIP_NAME }} archive/*
-#
-#      - name: Upload Artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: ${{ env.ZIP_NAME }}
-#          path: ${{ env.ZIP_NAME }}
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+        with:
+          useConfigFile: true
+
+      - name: Create version.json
+        run: |
+          echo '{
+            "Major": ${{ steps.gitversion.outputs.major }},
+            "Minor": ${{ steps.gitversion.outputs.minor }},
+            "Patch": ${{ steps.gitversion.outputs.patch }}
+          }' > version.json
+
+      - name: Commit version.json
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add version.json
+          git commit -m "ci: update version to ${{ steps.gitversion.outputs.semVer }}" || echo "No changes to commit"
+          git push origin HEAD:main
