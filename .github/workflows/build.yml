@@ -55,7 +55,7 @@ jobs:
 
       - name: Create ZIP
         run: |
-          ZIP_NAME="PlantUML-Extension-v${{ steps.gitversion.outputs.major }}.${{ steps.gitversion.outputs.minor }}.zip"
+          ZIP_NAME="PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.zip"
           zip -r $ZIP_NAME archive/*
           echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 
