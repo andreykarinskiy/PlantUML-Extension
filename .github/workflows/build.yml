@@ -61,9 +61,7 @@ jobs:
 
       - name: show version
         run: |
-          echo ${{ steps.gitversion.outputs.major }}
-          echo ${{ steps.gitversion.outputs.minor }}
-          echo ${{ steps.gitversion.outputs.patch }}
+          echo ${{ env.semVer }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
