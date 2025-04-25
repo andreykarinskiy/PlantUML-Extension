@@ -14,25 +14,4 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Determine Version
-        id: version_step # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v3.2.0
-        with:
-          useConfigFile: true
-
-      - name: Create version.json
-        run: |
-          echo '{
-            "Major": ${{ steps.gitversion.outputs.major }},
-            "Minor": ${{ steps.gitversion.outputs.minor }},
-            "Patch": ${{ steps.gitversion.outputs.patch }}
-          }' > version.json
-
-      - name: Commit version.json
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add version.json
-          git commit -m "ci: update version to ${{ steps.gitversion.outputs.semVer }}" || echo "No changes to commit"
-          git push origin HEAD:main
+          
