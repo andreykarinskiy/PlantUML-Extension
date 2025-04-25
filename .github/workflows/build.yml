@@ -44,7 +44,7 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add version.json
           git commit -m "ci: update version to ${{ steps.gitversion.outputs.semVer }}" || echo "No changes to commit"
-          git push origin HEAD:main
+          git push origin HEAD:main --force
 
       - name: Prepare Archive
         run: |
