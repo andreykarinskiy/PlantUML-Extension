@@ -30,7 +30,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: PlantUml-Extension
-        path: path/**/*.zip
+        path: '**/*.zip'
 
 #    - name: Upload to Release
 #      if: success() && steps.package.outcome == 'success'
