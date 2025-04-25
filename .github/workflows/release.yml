@@ -3,10 +3,6 @@ name: Release
 on:
   push:
     branches: [ "master" ]
-    tags:
-      - "v*.*.*"
-#  release:
-#    types: [created]
 
 jobs:
   package-and-release:
@@ -31,13 +27,3 @@ jobs:
       with:
         name: PlantUml-Extension
         path: '**/*.zip'
-
-#    - name: Upload to Release
-#      if: success() && steps.package.outcome == 'success'
-#      uses: softprops/action-gh-release@v2
-#      if: github.ref_type == 'tag'
-#      with:
-#        files: |
-#          PlantUml-Extension.zip
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
