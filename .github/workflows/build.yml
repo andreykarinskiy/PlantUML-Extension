@@ -2,45 +2,55 @@ name: Build
 
 on:
   push:
-    branches: [ "master", "develop" ]
-  pull_request:
-    branches: [ "master" ]
-
-  workflow_dispatch:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Prepare and package PlantUML files
-        id: package
-        run: |
-          find src -type f \( -name '*.puml' \) > filelist.txt
-          
-          if [ ! -s filelist.txt ]; then
-            echo "No PlantUML files found in 'src' directory. Skipping archive creation."
-            exit 0
-          fi
-          
-          mkdir -p temp_archive
-          
-          while IFS= read -r file; do
-            dest="${file#src/}"
-            mkdir -p "temp_archive/$(dirname "$dest")"
-            cp "$file" "temp_archive/$dest"
-          done < filelist.txt
-          
-          cd temp_archive
-          zip -r ../PlantUml-Extension.zip .
-          cd ..
-          
-          rm -rf temp_archive filelist.txt
-
-      - uses: actions/upload-artifact@v4
         with:
-          name: PlantUml-Extension
-          path: '**/*.zip'
+          fetch-depth: 0  # Полная история для GitVersion
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Generate Version Info
+        run: gitversion /output json /outputfile version.json
+
+      - name: Commit version.json
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add version.json
+          git commit -m "ci: update version [skip ci]"
+          git push origin HEAD:main
+
+      - name: Extract Version
+        id: set-version
+        run: |
+          MAJOR=$(jq -r '.Major' version.json)
+          MINOR=$(jq -r '.Minor' version.json)
+          echo "VERSION=v$MAJOR.$MINOR" >> $GITHUB_ENV
+          echo "ZIP_NAME=PlantUML-Extension-$VERSION.zip" >> $GITHUB_ENV
+
+      - name: Create Archive
+        run: |
+          mkdir -p archive
+          # Копируем PUML-файлы с сохранением структуры директорий
+          find src -name '*.puml' -exec cp --parents '{}' archive/ \;
+          # Добавляем version.json
+          cp version.json archive/
+          # Создаем zip-архив
+          zip -r ${{ env.ZIP_NAME }} archive/*
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.ZIP_NAME }}
+          path: ${{ env.ZIP_NAME }}
