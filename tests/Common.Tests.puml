@@ -11,9 +11,18 @@
     !assert %size(%splitstr($actual, ".")) == 3
 !endprocedure
 ''----------------------------------------------------------------------------------------------------------------------
+!procedure PlantUmlExtensionLastChange_returns_date_of_last_modification()
+    '' Arrange, Act
+    !$actual = $PlantUmlExtensionLastChange()
+
+    '' Assert
+    !assert %size(%splitstr($actual, "-")) == 3
+!endprocedure
+''----------------------------------------------------------------------------------------------------------------------
 '' Запуск тестов
 ''----------------------------------------------------------------------------------------------------------------------
 PlantUmlExtensionVer_returns_semantic_version()
+PlantUmlExtensionLastChange_returns_date_of_last_modification()
 ''----------------------------------------------------------------------------------------------------------------------
 caption OK
 @enduml

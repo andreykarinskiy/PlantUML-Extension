@@ -8,4 +8,11 @@
     !return $Format("%1.%2.%3", $ver.Major, $ver.Minor, $ver.Patch)
 !endfunction
 ''----------------------------------------------------------------------------------------------------------------------
+'' Get  PlantUml Extension library last change date
+'' example: !$date = $PlantUmlExtensionLastChange()
+!function $PlantUmlExtensionLastChange()
+    !$date = %load_json("../version.json")
+    !return $date.CommitDate
+!endfunction
+''----------------------------------------------------------------------------------------------------------------------
 @enduml
