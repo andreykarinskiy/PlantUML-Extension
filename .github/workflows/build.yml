@@ -48,18 +48,18 @@ jobs:
           git push -f
           git push origin HEAD:main --force-with-lease
 
-      - name: Prepare Archive
-        run: |
-          mkdir -p archive
-          # Копируем PUML-файлы с сохранением структуры
-          find src -name '*.puml' -exec cp --parents '{}' archive/ \;
-          cp version.json archive/
+      # - name: Prepare Archive
+      #   run: |
+      #     mkdir -p archive
+      #     # Копируем PUML-файлы с сохранением структуры
+      #     find src -name '*.puml' -exec cp --parents '{}' archive/ \;
+      #     cp version.json archive/
 
-      - name: Create ZIP
-        run: |
-          ZIP_NAME="PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.${{ env.patch }}.zip"
-          zip -r $ZIP_NAME archive/*
-          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+      # - name: Create ZIP
+      #   run: |
+      #     ZIP_NAME="PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.${{ env.patch }}.zip"
+      #     zip -r $ZIP_NAME archive/*
+      #     echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
 
       - name: show version
         run: |
@@ -69,4 +69,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ZIP_NAME }}
-          path: ${{ env.ZIP_NAME }}
+          path: |
+            *.puml
+            *.json
