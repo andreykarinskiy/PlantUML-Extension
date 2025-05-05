@@ -70,5 +70,6 @@ jobs:
         with:
           name: PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.${{ env.patch }}
           path: |
-            ./**/*.json
-            ./**/*.puml
+            ./version.json
+            ./src/**/*.json
+            ./src/**/*.puml
