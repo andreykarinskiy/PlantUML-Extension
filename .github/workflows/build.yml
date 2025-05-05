@@ -1,0 +1,75 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.2.0
+        with:
+          versionSpec: '6.2.x'
+          
+      - name: Determine Version
+        id: version_step
+        uses: gittools/actions/gitversion/execute@v3.2.0
+
+      - run: |
+          echo "FullSemVer (env.fullSemVer)            : ${{ env.fullSemVer }}"
+        name: Display GitVersion variables (without prefix)
+
+      - name: Create version.json
+        run: |
+          echo '{
+            "CommitDate": "${{ env.commitDate }}",
+            "Major": ${{ env.major }},
+            "Minor": ${{ env.minor }},
+            "Patch": ${{ env.patch }}
+          }' > version.json
+
+      - name: Commit version.json
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add version.json
+          git commit -m "ci: update version to ${{ steps.gitversion.outputs.semVer }}" || echo "No changes to commit"
+          git push -f
+          git push origin HEAD:main --force-with-lease
+
+      # - name: Prepare Archive
+      #   run: |
+      #     mkdir -p archive
+      #     # Копируем PUML-файлы с сохранением структуры
+      #     find src -name '*.puml' -exec cp --parents '{}' archive/ \;
+      #     cp version.json archive/
+
+      # - name: Create ZIP
+      #   run: |
+      #     ZIP_NAME="PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.${{ env.patch }}.zip"
+      #     zip -r $ZIP_NAME archive/*
+      #     echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+
+      - name: show version
+        run: |
+          echo ${{ env.semVer }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlantUML-Extension-v${{ env.major }}.${{ env.minor }}.${{ env.patch }}
+          path: |
+            ./version.json
+            ./src/**/*.json
+            ./src/**/*.puml
